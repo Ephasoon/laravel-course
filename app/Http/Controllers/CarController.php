@@ -147,9 +147,7 @@ class CarController extends Controller
      */
     public function edit(Car $car)
     {
-        if (auth()->id() !== $car->user_id) {
-            abort(403);
-        }
+        $this->authorize('update', $car);
 
         $car->load([
             'features',
@@ -165,6 +163,8 @@ class CarController extends Controller
      */
     public function update(UpdateCarRequest $request, Car $car)
     {
+        $this->authorize('update', $car);
+
         DB::transaction(function () use ($request, $car) {
             $car->update([
                 'maker_id' => $request->integer('maker_id'),
@@ -231,6 +231,10 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
+        $this->authorize('delete', $car);
+
+        $car->delete();
+
         return redirect()
             ->route('car.index')
             ->with('success', 'Car deleted successfully.');
