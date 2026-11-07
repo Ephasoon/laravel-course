@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class State extends Model
+{
+    use HasFactory;
+
+    // protected $table = 'car_states';
+
+    public $timestamps = false;
+}
