@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             ModelSeeder::class,
             StateSeeder::class,
             CitySeeder::class,
+            CarSeeder::class,
+            FavouriteCarSeeder::class,
         ]);
 
         User::updateOrCreate(
