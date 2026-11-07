@@ -256,7 +256,7 @@ states=0  cities=0  fuel_types=4
 
 ### Priority 0 — make the app healthy
 1. [x] **Fix the 8 broken models**: add `use Illuminate\Database\Eloquent\Factories\HasFactory;` to `CarFeatures`, `CarImages`, `CarType`, `City`, `FuelType`, `Maker`, `Model`, `State`. Re-run the tinker model check. — **DONE (Phase 2): all 8 models load; `FuelType::count()` = 4.**
-2. **Clean `routes/web.php`**: remove the dead `view('welcome')` route, keep one `/` route, add a `Route::fallback()` / custom 404.
+2. [x] **Clean `routes/web.php`**: remove the dead `view('welcome')` route, keep one `/` route, add a `Route::fallback()` / custom 404. — **DONE (Phase 2): one `/` route; fallback returns `errors.404` with HTTP 404 (verified).**
 3. **Fix `CarController@store`**: replace the missing `car.store` view with a redirect for now (or implement it in step 11), and make `update`/`destroy` return proper responses so POST/PUT/DELETE no longer 500.
 4. **Fix schema defects with one corrective migration**: change `cars.fuel_type_id` FK to `fuel_types`, make `deleted_at` nullable, add FK `car_features.car_id`, add unique index on `favourite_cars(user_id, car_id)`, add search indexes. Run `php artisan migrate` (or `migrate:fresh` in dev).
 
