@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\loginController;
-use App\Http\Controllers\signupController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SignupController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
@@ -22,11 +22,17 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('car', CarController::class)->only(['index', 'show']);
 
-Route::get('/signup', [signupController::class, 'index'])->name('signup');
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'index'])->name('login');
+    Route::post('/login', [LoginController::class, 'store'])->middleware('throttle:10,1');
+    Route::get('/signup', [SignupController::class, 'index'])->name('signup');
+    Route::post('/signup', [SignupController::class, 'store']);
+});
 
-Route::get('/login', [loginController::class, 'index'])->name('login');
+Route::post('/logout', [LoginController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
 
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);
 });
-

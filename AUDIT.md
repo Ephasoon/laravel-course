@@ -275,9 +275,11 @@ states=0  cities=0  fuel_types=4
 14. **Add favourites + soft-delete restore**: a `FavouriteCarController` (toggle) and a restore action; wire the heart buttons.
 
 ### Priority 3 — auth and authorization
-15. **Implement auth**: POST `/register`, POST `/login`, POST `/logout`; use `Auth::attempt`, validation, session regeneration; add `auth` middleware around car create/edit/update/destroy; redirect guests to login.
+15. [x] **Implement auth**: POST `/register`, POST `/login`, POST `/logout`; use `Auth::attempt`, validation, session regeneration; add `auth` middleware around car create/edit/update/destroy; redirect guests to login. — **DONE (Phase 2): StudlyCase `LoginController`/`SignupController`; guest GET/POST login and signup; throttled login; remember-me; session regeneration/invalidation; real POST logout; verified by `tests/Feature/AuthTest.php`.**
 16. **Add password reset** (or email-verification) using Laravel’s built-in password broker; add request/reset views and routes.
 17. **Add `CarPolicy`** and register it; authorize update/delete/show-private actions by ownership; add `Gate::before`/policy tests.
+
+> Step 16 (password reset) and 17 (CarPolicy) are still open.
 18. **Wire header/auth UI**: fix `.html` links, show Login/Signup vs My Account based on `@auth`, make logout a real POST form.
 
 ### Priority 4 — API, async, mail, cache
