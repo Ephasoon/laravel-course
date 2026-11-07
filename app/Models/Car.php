@@ -3,11 +3,38 @@
 namespace App\Models;
 
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[Fillable([
+    'maker_id',
+    'model_id',
+    'year',
+    'price',
+    'vin',
+    'mileage',
+    'car_type_id',
+    'fuel_type_id',
+    'user_id',
+    'city_id',
+    'address',
+    'phone',
+    'description',
+    'published_at',
+])]
 class Car extends Model
 {
     use HasFactory, SoftDeletes;
+
+    protected function casts(): array
+    {
+        return [
+            'published_at' => 'datetime',
+            'price' => 'integer',
+            'year' => 'integer',
+            'mileage' => 'integer',
+        ];
+    }
 }
