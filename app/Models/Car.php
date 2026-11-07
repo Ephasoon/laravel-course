@@ -80,4 +80,9 @@ class Car extends Model
     {
         return $this->hasMany(CarImages::class);
     }
+
+    public function primaryImage(): HasOne
+    {
+        return $this->hasOne(CarImages::class)->ofMany('position', 'min');
+    }
 }

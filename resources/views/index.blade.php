@@ -94,9 +94,11 @@
         <div class="container">
           <h2>Latest Added Cars</h2>
           <div class="car-items-listing">
-           @for($i = 0; $i < 12; $i++)
-           <x-car-item/>
-           @endfor
+           @forelse($cars as $car)
+           <x-car-item :car="$car" />
+           @empty
+           <p class="p-medium">No cars have been published yet.</p>
+           @endforelse
           </div>
         </div>
       </section>
