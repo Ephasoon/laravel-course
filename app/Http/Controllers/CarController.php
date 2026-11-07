@@ -28,7 +28,9 @@ class CarController extends Controller
      */
     public function store(Request $request)
     {
-        return view(view:'car.store');
+        return redirect()
+            ->route('car.index')
+            ->with('success', 'Car created successfully.');
     }
 
     /**
@@ -52,7 +54,9 @@ class CarController extends Controller
      */
     public function update(Request $request, Car $car)
     {
-        //
+        return redirect()
+            ->route('car.index')
+            ->with('success', 'Car updated successfully.');
     }
 
     /**
@@ -60,7 +64,9 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
-        //
+        return redirect()
+            ->route('car.index')
+            ->with('success', 'Car deleted successfully.');
     }
     public function search()
     {
