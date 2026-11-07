@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('car_features', function (Blueprint $table) {
-            $table->unsignedBigInteger( column: 'car_id')->primary();
+            $table->foreignId(column: 'car_id')->constrained(table: 'cars');
+            $table->primary('car_id');
             $table->boolean( column: 'abs')->default( value: 0);
             $table->boolean( column: 'air_conditioning')->default( value: 0);
             $table->boolean( column: 'power_windows')->default( value: 0);

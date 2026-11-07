@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId(column: 'car_id')->constrained(table: 'cars');
             $table->foreignId(column: 'user_id')->constrained(table: 'users');
+            $table->unique(['user_id', 'car_id']);
 
         });
     }

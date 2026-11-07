@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string(column: 'vin', length:255);
             $table->integer(column: 'mileage');
             $table->foreignId(column: 'car_type_id')->constrained(table: 'car_types');
-            $table->foreignId(column: 'fuel_type_id')->constrained(table: 'car_types');
+            $table->foreignId(column: 'fuel_type_id')->constrained(table: 'fuel_types');
             $table->foreignId(column: 'user_id')->constrained(table: 'users');
             $table->foreignId(column: 'city_id')->constrained(table: 'cities');
             $table->string(column: 'address', length:255);
@@ -28,7 +28,10 @@ return new class extends Migration
             $table->longText(column: 'description')->nullable();
             $table->timestamp(column: 'published_at')->nullable();
             $table->timestamps();
-            $table->timestamp(column: 'deleted_at');
+            $table->softDeletes();
+            $table->index('year');
+            $table->index('price');
+            $table->index('mileage');
         });
     }
 
