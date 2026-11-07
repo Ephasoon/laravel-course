@@ -54,6 +54,10 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
+        if ($car->published_at === null && auth()->id() !== $car->user_id) {
+            abort(404);
+        }
+
         $car->load([
             'maker',
             'model',

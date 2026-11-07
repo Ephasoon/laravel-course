@@ -23,8 +23,7 @@ test('car index shows only the authenticated users cars', function () {
     expect($response->viewData('cars')->pluck('id')->all())->toBe([$ownCar->id]);
 });
 
-test('car show displays the real car details and ordered relations', function () {
-    $car = Car::factory()->create([
+test('car show displays the real car details and ordered relations', function () {    $car = Car::factory()->create([
         'price' => 1234567,
         'mileage' => 54321,
         'phone' => '0911223344',
@@ -65,4 +64,35 @@ test('car show displays the real car details and ordered relations', function ()
 
     expect($response->viewData('car')->images->pluck('position')->all())->toBe([1, 2])
         ->and($response->viewData('car')->features->abs)->toBeTrue();
+});
+
+test('guests get 404 for an unpublished car', function () {
+    $car = Car::factory()->create(['published_at' => null]);
+
+    $this->get(route('car.show', $car))->assertNotFound();
+});
+
+test('the owner can view their own unpublished car', function () {
+    $owner = User::factory()->create();
+    $car = Car::factory()->create([
+        'user_id' => $owner->id,
+        'published_at' => null,
+    ]);
+
+    $this->actingAs($owner)
+        ->get(route('car.show', $car))
+        ->assertOk();
+});
+
+test('another user gets 404 for an unpublished car', function () {
+    $owner = User::factory()->create();
+    $other = User::factory()->create();
+    $car = Car::factory()->create([
+        'user_id' => $owner->id,
+        'published_at' => null,
+    ]);
+
+    $this->actingAs($other)
+        ->get(route('car.show', $car))
+        ->assertNotFound();
 });
