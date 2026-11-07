@@ -96,3 +96,16 @@ test('another user gets 404 for an unpublished car', function () {
         ->get(route('car.show', $car))
         ->assertNotFound();
 });
+test('car index wraps each delete button in a delete form', function () {
+    $owner = User::factory()->create();
+    $cars = Car::factory()->count(2)->create(['user_id' => $owner->id]);
+
+    $html = $this->actingAs($owner)->get(route('car.index'))->getContent();
+
+    expect(substr_count($html, '<svg'))->toBe(substr_count($html, '</svg>'));
+    expect(substr_count($html, '<form'))->toBe(substr_count($html, '</form>'));
+
+    foreach ($cars as $car) {
+        expect($html)->toContain('action="'.route('car.destroy', $car).'"');
+    }
+});
