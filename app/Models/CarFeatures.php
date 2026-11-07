@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable([
     'car_id',
@@ -32,6 +33,11 @@ class CarFeatures extends Model
     public $incrementing = false;
 
     protected $keyType = 'int';
+
+    public function car(): BelongsTo
+    {
+        return $this->belongsTo(Car::class);
+    }
 
     protected function casts(): array
     {

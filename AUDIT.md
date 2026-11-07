@@ -262,7 +262,7 @@ states=0  cities=0  fuel_types=4
 
 ### Priority 1 — data layer
 5. [x] **Add model fillable/casts**: declare `$fillable` and `$casts` on `Car`, `User`, and all catalog models (including `published_at`, `price`, `mileage`, `year`). — **DONE (Phase 2): all models use `#[Fillable]`; `Car` casts `published_at`/`price`/`year`/`mileage`, `CarFeatures` casts booleans and uses `car_id` as non-incrementing key; verified by `tests/Feature/ModelConfigurationTest.php`.**
-6. **Add Eloquent relationships**: `Car` belongsTo Maker/Model/CarType/FuelType/User/City, hasOne CarFeatures, hasMany CarImages; `User` hasMany Cars, belongsToMany FavouriteCars; `Maker`/`Model`/`State`/`City` inverse relations.
+6. [x] **Add Eloquent relationships**: `Car` belongsTo Maker/Model/CarType/FuelType/User/City, hasOne CarFeatures, hasMany CarImages; `User` hasMany Cars, belongsToMany FavouriteCars; `Maker`/`Model`/`State`/`City` inverse relations. — **DONE (Phase 2): all relationships added, including `favourite_cars` pivot (no timestamps on that table); verified by `tests/Feature/RelationshipsTest.php`.**
 7. **Create catalog factories + seeders**: `CarTypeFactory`, `FuelTypeFactory`, `MakerFactory`, `ModelFactory`, `StateFactory`, `CityFactory`; seed realistic data in `DatabaseSeeder`.
 8. **Create `CarFactory`, `CarFeaturesFactory`, `CarImageFactory`, `FavouriteCarFactory`** and seed 20–50 cars with relations; run `php artisan migrate:fresh --seed` and verify counts.
 
