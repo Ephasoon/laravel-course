@@ -328,6 +328,25 @@
               </div>
             </div>
             <div class="form-images">
+              @if($isEdit && $car->images->isNotEmpty())
+                <div class="car-form-images">
+                  @foreach($car->images as $image)
+                    <label class="car-form-image-preview">
+                      <img src="{{ $image->image_path }}" alt="" />
+                      <span>
+                        <input type="checkbox" name="delete_images[]" value="{{ $image->id }}" />
+                        Delete
+                      </span>
+                    </label>
+                  @endforeach
+                </div>
+                @error('delete_images')
+                  <span class="text-error">{{ $message }}</span>
+                @enderror
+                @error('delete_images.*')
+                  <span class="text-error">{{ $message }}</span>
+                @enderror
+              @endif
               <div class="form-image-upload">
                 <div class="upload-placeholder">
                   <svg
@@ -358,7 +377,7 @@
           </div>
           <div class="p-medium" style="width: 100%">
             <div class="flex justify-end gap-1">
-              <button type="button" class="btn btn-default">Reset</button>
+              <button type="reset" class="btn btn-default">Reset</button>
               <button class="btn btn-primary">Submit</button>
             </div>
           </div>

@@ -44,6 +44,8 @@ class UpdateCarRequest extends FormRequest
             'published' => ['boolean'],
             'images' => ['nullable', 'array', 'max:10'],
             'images.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'delete_images' => ['nullable', 'array'],
+            'delete_images.*' => ['integer'],
             'abs' => ['boolean'],
             'air_conditioning' => ['boolean'],
             'power_windows' => ['boolean'],
