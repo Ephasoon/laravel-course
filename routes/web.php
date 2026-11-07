@@ -13,7 +13,14 @@ Route::get('/about', function () {
 });
 
 Route::get('/car/search', [CarController::class, 'search'])->name('car.search');
-Route::resource('car', CarController::class);
+
+Route::middleware('auth')->group(function () {
+    Route::resource('car', CarController::class)->only([
+        'create', 'store', 'edit', 'update', 'destroy',
+    ]);
+});
+
+Route::resource('car', CarController::class)->only(['index', 'show']);
 
 Route::get('/signup', [signupController::class, 'index'])->name('signup');
 

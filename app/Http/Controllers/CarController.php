@@ -36,7 +36,7 @@ class CarController extends Controller
      */
     public function create()
     {
-        return view(view:'car.create');
+        return view('car.create', $this->formData());
     }
 
     /**
@@ -92,7 +92,17 @@ class CarController extends Controller
      */
     public function edit(Car $car)
     {
-        return view(view:'car.edit');
+        if (auth()->id() !== $car->user_id) {
+            abort(403);
+        }
+
+        $car->load([
+            'features',
+            'city',
+            'images' => fn ($query) => $query->orderBy('position'),
+        ]);
+
+        return view('car.edit', array_merge($this->formData(), compact('car')));
     }
 
     /**
@@ -187,5 +197,17 @@ class CarController extends Controller
         return view('car.search', compact(
             'cars', 'makers', 'models', 'states', 'cities', 'carTypes', 'fuelTypes'
         ));
+    }
+
+    private function formData(): array
+    {
+        return [
+            'makers' => Maker::orderBy('name')->get(),
+            'models' => Model::orderBy('name')->get(),
+            'carTypes' => CarType::orderBy('name')->get(),
+            'fuelTypes' => FuelType::orderBy('name')->get(),
+            'states' => State::orderBy('name')->get(),
+            'cities' => City::orderBy('name')->get(),
+        ];
     }
 }
