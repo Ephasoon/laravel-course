@@ -18,7 +18,17 @@ class CarController extends Controller
      */
     public function index()
     {
-        return view(view: 'car.index');
+        if (! auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        $cars = Car::query()
+            ->where('user_id', auth()->id())
+            ->with(['maker', 'model', 'carType', 'fuelType', 'city.state', 'primaryImage'])
+            ->orderByDesc('published_at')
+            ->paginate(15);
+
+        return view('car.index', compact('cars'));
     }
 
     /**
@@ -44,7 +54,33 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        return view(view:'car.show');
+        $car->load([
+            'maker',
+            'model',
+            'carType',
+            'fuelType',
+            'city.state',
+            'user',
+            'images' => fn ($query) => $query->orderBy('position'),
+            'features',
+        ]);
+
+        $featureLabels = [
+            'abs' => 'ABS',
+            'air_conditioning' => 'Air Conditioning',
+            'power_windows' => 'Power Windows',
+            'power_door_locks' => 'Power Door Locks',
+            'cruise_control' => 'Cruise Control',
+            'bluetooth_connectivity' => 'Bluetooth Connectivity',
+            'remote_start' => 'Remote Start',
+            'gps_navigation' => 'GPS Navigation System',
+            'heated_seats' => 'Heated Seats',
+            'climate_control' => 'Climate Control',
+            'rear_parking_sensors' => 'Rear Parking Sensors',
+            'leather_seats' => 'Leather Seats',
+        ];
+
+        return view('car.show', compact('car', 'featureLabels'));
     }
 
     /**
