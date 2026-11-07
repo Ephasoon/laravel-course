@@ -1,7 +1,8 @@
 @props(['title' => '', 'bodyClass' => ''])
-<x-app-layout :title="$title" :bodyClass="$bodyClass">
+<x-base-layout :title="$title" :bodyClass="$bodyClass">
     <main>
       <div class="container-small page-login">
+        <x-flash-message />
         <div class="flex" style="gap: 5rem">
           <div class="auth-page-form">
             <div class="text-center">
@@ -24,4 +25,4 @@
         </div>
       </div>
     </main>
-</x-app-layout>
+</x-base-layout>

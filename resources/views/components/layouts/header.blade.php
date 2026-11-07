@@ -20,6 +20,7 @@
           </svg>
         </button>
         <div class="navbar-auth">
+          @auth
           <a href="{{ route('car.create') }}" class="btn btn-add-new-car">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +41,7 @@
           </a>
           <div class="navbar-menu" tabindex="-1">
             <a href="javascript:void(0)" class="navbar-menu-handler">
-              My Account
+              {{ auth()->user()->name }}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -58,18 +59,22 @@
             </a>
             <ul class="submenu">
               <li>
-                <a href="my_cars.html">My Cars</a>
+                <a href="{{ route('car.index') }}">My Cars</a>
               </li>
               <li>
-                <a href="watchlist.html">My Favourite Cars</a>
+                {{-- TODO: link to the watchlist once step 14 adds its route. --}}
+                <a href="#">My Favourite Cars</a>
               </li>
               <li>
-                <form action="#" method="post">
+                <form action="{{ route('logout') }}" method="POST">
+                  @csrf
                   <button>Logout</button>
                 </form>
               </li>
             </ul>
           </div>
+          @endauth
+          @guest
           <a href="{{ route('signup') }}" class="btn btn-primary btn-signup">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -102,6 +107,7 @@
             </svg>
             Login
           </a>
+          @endguest
         </div>
       </div>
  </header>

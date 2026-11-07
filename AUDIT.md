@@ -280,7 +280,7 @@ states=0  cities=0  fuel_types=4
 17. **Add `CarPolicy`** and register it; authorize update/delete/show-private actions by ownership; add `Gate::before`/policy tests.
 
 > Step 16 (password reset) and 17 (CarPolicy) are still open.
-18. **Wire header/auth UI**: fix `.html` links, show Login/Signup vs My Account based on `@auth`, make logout a real POST form.
+18. [x] **Wire header/auth UI**: fix `.html` links, show Login/Signup vs My Account based on `@auth`, make logout a real POST form. — **DONE (Phase 2): header uses `route()` links; guests see Login/Signup; users see their name, My Cars, Add new car, and a CSRF-protected POST logout; shared flash component; verified by `tests/Feature/HeaderTest.php`.**
 
 ### Priority 4 — API, async, mail, cache
 19. **Install Sanctum** (`composer require laravel/sanctum`, publish config/migration), register `api:` routes in `bootstrap/app.php`, add `routes/api.php`.
