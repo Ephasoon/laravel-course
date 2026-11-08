@@ -41,6 +41,22 @@ php artisan boost:install
 
 Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
+## Queue and mail
+
+This project uses the database queue for queued work such as the "car published" notification. Start a worker with:
+
+```bash
+php artisan queue:work
+```
+
+With `MAIL_MAILER=log` in `.env`, outgoing mail is written to `storage/logs/laravel.log`. To send real email, set `MAIL_MAILER=smtp` and fill in `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, and the `MAIL_FROM_ADDRESS` / `MAIL_FROM_NAME` values in `.env`.
+
+Schedule the daily maintenance commands with:
+
+```bash
+php artisan schedule:work
+```
+
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
