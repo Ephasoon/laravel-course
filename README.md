@@ -41,6 +41,10 @@ php artisan boost:install
 
 Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
+## Frontend assets
+
+The site serves static CSS and JavaScript directly from `public/` (`/css/app.css` and `/js/app.js`, linked in `resources/views/layouts/base.blade.php`). The Vite/Tailwind scaffold (`vite.config.js`, `package.json`, `resources/css/app.css`, `resources/js/app.js`) is not referenced by any Blade view and is currently unused; it is kept for a possible future migration to Vite.
+
 ## Queue and mail
 
 This project uses the database queue for queued work such as the "car published" notification. Start a worker with:
