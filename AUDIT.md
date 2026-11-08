@@ -2,6 +2,14 @@
 
 _Audit date: 2026-11-07 · No application code was modified during this audit._
 
+## Status
+
+- **Tests:** 116 passing (`php artisan test`), 720 assertions.
+- **Routes:** 35 application routes (`php artisan route:list --except-vendor`).
+- **Database:** `php artisan migrate:fresh --seed` succeeds and seeds the catalog, 30 published cars, users, and favourites.
+
+All planned phases are complete: the app has data-driven browsing/search, favourites and a watchlist, owner CRUD with photo uploads, soft delete/restore, session auth with password reset, a Sanctum REST API, queued publish notifications, and cached catalog/home data that stores plain arrays and ids rather than Eloquent objects. Quality work is done (Pint, 116 tests), the frontend asset decision is documented, and the README includes local setup plus a production checklist.
+
 ## 1. Project summary
 
 **What it is:** A car-marketplace learning project (buy / sell cars). It has a home page, a car search page, car listing/create/edit/show mockups, and login/signup mockups. All real data handling is still missing; the views are static HTML mockups.
@@ -279,7 +287,6 @@ states=0  cities=0  fuel_types=4
 16. [x] **Add password reset** (or email-verification) using Laravel’s built-in password broker; add request/reset views and routes. — **DONE (Phase 6): `PasswordResetController` implements create/store/edit/update with the built-in `Password` broker; guest routes `password.request`, `password.email` (throttled 5/min), `password.reset`, `password.update`; `auth.forgot-password` and `auth.reset-password` views reuse the guest layout; identical success flash prevents account enumeration; verified by `tests/Feature/PasswordResetTest.php` (mailer is `log` by default, no custom template).**
 17. [x] **Add `CarPolicy`** and register it; authorize update/delete/show-private actions by ownership; add `Gate::before`/policy tests. — **DONE (Phase 2): CarPolicy created with `viewAny`/`view` true, `update`/`delete`/`restore`/`forceDelete` only for owner; CarController uses `$this->authorize()` in edit, update, destroy; CarPolicyTest verifies owner delete (soft), 403 for others, guest redirect, deleted cars disappear from home/search/show.**
 
-> Step 16 (password reset) is still open. Step 17 (CarPolicy) is done.
 18. [x] **Wire header/auth UI**: fix `.html` links, show Login/Signup vs My Account based on `@auth`, make logout a real POST form. — **DONE (Phase 2): header uses `route()` links; guests see Login/Signup; users see their name, My Cars, Add new car, and a CSRF-protected POST logout; shared flash component; verified by `tests/Feature/HeaderTest.php`.**
 
 ### Priority 4 — API, async, mail, cache
@@ -290,11 +297,11 @@ states=0  cities=0  fuel_types=4
 23. [x] **Add caching**: cache the home “latest cars” and catalog lookups with `Cache::remember`, invalidate on car create/update/delete; test cache behavior. — **DONE (Phase 5): `App\Support\Catalog` caches makers/models/states/cities/car types/fuel types for one hour and is used by `SearchForm` and `CarController`; `HomeController` caches the latest 12 published cars for five minutes; `CarObserver` and `CatalogObserver` (registered via `#[ObservedBy]`) invalidate the caches on create/update/delete/restore/force-delete; verified by `tests/Feature/CacheTest.php` with the array cache store. fixed: cache stores plain arrays/ids, not Eloquent objects**
 
 ### Priority 5 — quality and ship
-24. **Expand tests**: enable `RefreshDatabase` in `tests/Pest.php`; add feature tests for auth, car CRUD, validation failures, search filters, authorization; add unit tests for relationships.
-25. **Run quality tools**: `vendor/bin/pint` and `php artisan test`; fix all failures.
-26. **Integrate or remove Vite/Tailwind**: either switch `base.blade.php` to `@vite(['resources/css/app.css', 'resources/js/app.js'])` and remove the duplicated `public/css|js` files, or delete the unused Vite scaffolding. Run `npm run build`.
-27. **Write deployment/setup notes** in `README.md`: prerequisites, `.env` setup, `key:generate`, `migrate --seed`, `storage:link`, `npm ci && npm run build`, queue worker, scheduler, `optimize`/`config:cache`/`route:cache`, and production checklist.
-28. **Final cleanup**: remove debug `dump()` from `card.blade.php`, remove unused `TestComponent`/`test()` method, make controller class names StudlyCase, commit the currently untracked/modified files with a clear message.
+24. [x] **Expand tests**: enable `RefreshDatabase` in `tests/Pest.php`; add feature tests for auth, car CRUD, validation failures, search filters, authorization; add unit tests for relationships. — **DONE (Phase 7): `RefreshDatabase` is enabled for Feature and Unit tests; 116 tests cover auth, CRUD, validation, search, authorization, API, cache, notifications, and password reset.**
+25. [x] **Run quality tools**: `vendor/bin/pint` and `php artisan test`; fix all failures. — **DONE (Phase 7): `vendor/bin/pint` applied repo-wide and `php artisan test` passes.**
+26. [x] **Integrate or remove Vite/Tailwind**: either switch `base.blade.php` to `@vite(['resources/css/app.css', 'resources/js/app.js'])` and remove the duplicated `public/css|js` files, or delete the unused Vite scaffolding. Run `npm run build`. — **DONE (Phase 7): kept the static `public/css` and `public/js` assets and documented in `README.md` that the Vite/Tailwind scaffold is unused.**
+27. [x] **Write deployment/setup notes** in `README.md`: prerequisites, `.env` setup, `key:generate`, `migrate --seed`, `storage:link`, `npm ci && npm run build`, queue worker, scheduler, `optimize`/`config:cache`/`route:cache`, and production checklist. — **DONE (Phase 7): project README includes requirements, local setup, seeded login, tests, an API table, and a production checklist.**
+28. [x] **Final cleanup**: remove debug `dump()` from `card.blade.php`, remove unused `TestComponent`/`test()` method, make controller class names StudlyCase, commit the currently untracked/modified files with a clear message. — **DONE (Phase 7): removed the debug `dump()` and deleted the unused `TestComponent`; Pint removed dead imports; all work is committed.**
 
 ---
 
