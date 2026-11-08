@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Observers\CatalogObserver;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[ObservedBy(CatalogObserver::class)]
 #[Fillable(['maker_id', 'name'])]
 class Model extends EloquentModel
 {

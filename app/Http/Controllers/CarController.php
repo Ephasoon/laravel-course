@@ -6,12 +6,7 @@ use App\Actions\SaveCar;
 use App\Http\Requests\StoreCarRequest;
 use App\Http\Requests\UpdateCarRequest;
 use App\Models\Car;
-use App\Models\CarType;
-use App\Models\City;
-use App\Models\FuelType;
-use App\Models\Maker;
-use App\Models\Model;
-use App\Models\State;
+use App\Support\Catalog;
 use Illuminate\Http\Request;
 
 class CarController extends Controller
@@ -178,12 +173,12 @@ class CarController extends Controller
 
         $favouriteIds = auth()->check() ? auth()->user()->favouriteCars->pluck('id')->toArray() : [];
 
-        $makers = Maker::orderBy('name')->get();
-        $models = Model::orderBy('name')->get();
-        $states = State::orderBy('name')->get();
-        $cities = City::orderBy('name')->get();
-        $carTypes = CarType::orderBy('name')->get();
-        $fuelTypes = FuelType::orderBy('name')->get();
+        $makers = Catalog::makers();
+        $models = Catalog::models();
+        $states = Catalog::states();
+        $cities = Catalog::cities();
+        $carTypes = Catalog::carTypes();
+        $fuelTypes = Catalog::fuelTypes();
 
         return view('car.search', compact(
             'cars', 'makers', 'models', 'states', 'cities', 'carTypes', 'fuelTypes', 'favouriteIds'
@@ -193,12 +188,12 @@ class CarController extends Controller
     private function formData(): array
     {
         return [
-            'makers' => Maker::orderBy('name')->get(),
-            'models' => Model::orderBy('name')->get(),
-            'carTypes' => CarType::orderBy('name')->get(),
-            'fuelTypes' => FuelType::orderBy('name')->get(),
-            'states' => State::orderBy('name')->get(),
-            'cities' => City::orderBy('name')->get(),
+            'makers' => Catalog::makers(),
+            'models' => Catalog::models(),
+            'carTypes' => Catalog::carTypes(),
+            'fuelTypes' => Catalog::fuelTypes(),
+            'states' => Catalog::states(),
+            'cities' => Catalog::cities(),
         ];
     }
 }
