@@ -6,6 +6,7 @@ use App\Models\Car;
 use App\Models\CarFeatures;
 use App\Models\CarImages;
 use App\Models\User;
+use App\Notifications\CarPublishedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -30,7 +31,7 @@ class SaveCar
 
     public function store(Request $request, User $user): Car
     {
-        return DB::transaction(function () use ($request, $user) {
+        $car = DB::transaction(function () use ($request, $user) {
             $car = Car::create([
                 'maker_id' => $request->integer('maker_id'),
                 'model_id' => $request->integer('model_id'),
@@ -65,11 +66,19 @@ class SaveCar
 
             return $car;
         });
+
+        if ($car->published_at !== null) {
+            $car->user->notify(new CarPublishedNotification($car));
+        }
+
+        return $car;
     }
 
     public function update(Request $request, Car $car): Car
     {
-        return DB::transaction(function () use ($request, $car) {
+        $wasPublished = $car->published_at !== null;
+
+        $car = DB::transaction(function () use ($request, $car) {
             $car->update([
                 'maker_id' => $request->integer('maker_id'),
                 'model_id' => $request->integer('model_id'),
@@ -126,6 +135,12 @@ class SaveCar
 
             return $car;
         });
+
+        if (! $wasPublished && $car->published_at !== null) {
+            $car->user->notify(new CarPublishedNotification($car));
+        }
+
+        return $car;
     }
 
     private function featureValues(Request $request): array
