@@ -26,32 +26,56 @@ class Catalog
 
     public static function makers(): Collection
     {
-        return Cache::remember('catalog.makers', self::TTL, fn () => Maker::orderBy('name')->get());
+        return Maker::hydrate(Cache::remember(
+            'catalog.makers',
+            self::TTL,
+            fn () => Maker::orderBy('name')->get()->toArray()
+        ));
     }
 
     public static function models(): Collection
     {
-        return Cache::remember('catalog.models', self::TTL, fn () => Model::orderBy('name')->get());
+        return Model::hydrate(Cache::remember(
+            'catalog.models',
+            self::TTL,
+            fn () => Model::orderBy('name')->get()->toArray()
+        ));
     }
 
     public static function states(): Collection
     {
-        return Cache::remember('catalog.states', self::TTL, fn () => State::orderBy('name')->get());
+        return State::hydrate(Cache::remember(
+            'catalog.states',
+            self::TTL,
+            fn () => State::orderBy('name')->get()->toArray()
+        ));
     }
 
     public static function cities(): Collection
     {
-        return Cache::remember('catalog.cities', self::TTL, fn () => City::orderBy('name')->get());
+        return City::hydrate(Cache::remember(
+            'catalog.cities',
+            self::TTL,
+            fn () => City::orderBy('name')->get()->toArray()
+        ));
     }
 
     public static function carTypes(): Collection
     {
-        return Cache::remember('catalog.car_types', self::TTL, fn () => CarType::orderBy('name')->get());
+        return CarType::hydrate(Cache::remember(
+            'catalog.car_types',
+            self::TTL,
+            fn () => CarType::orderBy('name')->get()->toArray()
+        ));
     }
 
     public static function fuelTypes(): Collection
     {
-        return Cache::remember('catalog.fuel_types', self::TTL, fn () => FuelType::orderBy('name')->get());
+        return FuelType::hydrate(Cache::remember(
+            'catalog.fuel_types',
+            self::TTL,
+            fn () => FuelType::orderBy('name')->get()->toArray()
+        ));
     }
 
     public static function forget(): void

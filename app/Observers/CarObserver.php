@@ -33,6 +33,6 @@ class CarObserver
 
     private function clear(): void
     {
-        Cache::forget('home.latest_cars');
+        Cache::forget('home.latest_car_ids');
     }
 }

@@ -3,31 +3,38 @@
 namespace App\Observers;
 
 use App\Support\Catalog;
+use Illuminate\Support\Facades\Cache;
 
 class CatalogObserver
 {
     public function created(): void
     {
-        Catalog::forget();
+        $this->clear();
     }
 
     public function updated(): void
     {
-        Catalog::forget();
+        $this->clear();
     }
 
     public function deleted(): void
     {
-        Catalog::forget();
+        $this->clear();
     }
 
     public function restored(): void
     {
-        Catalog::forget();
+        $this->clear();
     }
 
     public function forceDeleted(): void
     {
+        $this->clear();
+    }
+
+    private function clear(): void
+    {
         Catalog::forget();
+        Cache::forget('home.latest_car_ids');
     }
 }
