@@ -176,7 +176,7 @@
           <div class="search-cars-results">
             <div class="car-items-listing">
               @forelse($cars as $car)
-                <x-car-item :car="$car" />
+                <x-car-item :car="$car" :favouriteIds="$favouriteIds" />
               @empty
                 <p class="p-medium">No cars match your search criteria.</p>
               @endforelse

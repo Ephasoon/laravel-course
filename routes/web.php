@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\FavouriteCarController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SignupController;
@@ -32,6 +33,10 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [LoginController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
+
+Route::middleware('auth')->get('/watchlist', [FavouriteCarController::class, 'index'])->name('watchlist');
+
+Route::middleware('auth')->post('/favourite/{car}', [FavouriteCarController::class, 'toggle'])->name('favourite.toggle');
 
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);

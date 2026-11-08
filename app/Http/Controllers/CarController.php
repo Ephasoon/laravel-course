@@ -124,6 +124,8 @@ class CarController extends Controller
             'features',
         ]);
 
+        $favouriteIds = auth()->check() ? auth()->user()->favouriteCars->pluck('id')->toArray() : [];
+
         $featureLabels = [
             'abs' => 'ABS',
             'air_conditioning' => 'Air Conditioning',
@@ -139,7 +141,7 @@ class CarController extends Controller
             'leather_seats' => 'Leather Seats',
         ];
 
-        return view('car.show', compact('car', 'featureLabels'));
+        return view('car.show', compact('car', 'featureLabels', 'favouriteIds'));
     }
 
     /**
@@ -302,6 +304,8 @@ class CarController extends Controller
 
         $cars = $query->paginate(15)->withQueryString();
 
+        $favouriteIds = auth()->check() ? auth()->user()->favouriteCars->pluck('id')->toArray() : [];
+
         $makers = Maker::orderBy('name')->get();
         $models = Model::orderBy('name')->get();
         $states = State::orderBy('name')->get();
@@ -310,7 +314,7 @@ class CarController extends Controller
         $fuelTypes = FuelType::orderBy('name')->get();
 
         return view('car.search', compact(
-            'cars', 'makers', 'models', 'states', 'cities', 'carTypes', 'fuelTypes'
+            'cars', 'makers', 'models', 'states', 'cities', 'carTypes', 'fuelTypes', 'favouriteIds'
         ));
     }
 

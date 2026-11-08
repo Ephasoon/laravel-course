@@ -63,7 +63,7 @@
               </li>
               <li>
                 {{-- TODO: link to the watchlist once step 14 adds its route. --}}
-                <a href="#">My Favourite Cars</a>
+                <a href="{{ route('watchlist') }}">My Favourite Cars</a>
               </li>
               <li>
                 <form action="{{ route('logout') }}" method="POST">

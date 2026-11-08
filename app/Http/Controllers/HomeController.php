@@ -15,6 +15,8 @@ class HomeController extends Controller
             ->limit(12)
             ->get();
 
-        return view('index', compact('cars'));
+        $favouriteIds = auth()->check() ? auth()->user()->favouriteCars->pluck('id')->toArray() : [];
+
+        return view('index', compact('cars', 'favouriteIds'));
     }
 }
