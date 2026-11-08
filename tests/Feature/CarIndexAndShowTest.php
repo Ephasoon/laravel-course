@@ -23,7 +23,8 @@ test('car index shows only the authenticated users cars', function () {
     expect($response->viewData('cars')->pluck('id')->all())->toBe([$ownCar->id]);
 });
 
-test('car show displays the real car details and ordered relations', function () {    $car = Car::factory()->create([
+test('car show displays the real car details and ordered relations', function () {
+    $car = Car::factory()->create([
         'price' => 1234567,
         'mileage' => 54321,
         'phone' => '0911223344',

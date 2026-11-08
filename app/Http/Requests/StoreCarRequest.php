@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreCarRequest extends FormRequest
 {
@@ -28,7 +29,7 @@ class StoreCarRequest extends FormRequest
                 'required',
                 'integer',
                 'exists:models,id',
-                \Illuminate\Validation\Rule::exists('models', 'id')->where('maker_id', $this->input('maker_id')),
+                Rule::exists('models', 'id')->where('maker_id', $this->input('maker_id')),
             ],
             'year' => ['required', 'integer', 'between:1950,'.(now()->year + 1)],
             'car_type_id' => ['required', 'integer', 'exists:car_types,id'],

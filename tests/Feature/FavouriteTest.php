@@ -50,11 +50,11 @@ test('the watchlist shows only the user\'s own favourites', function () {
 
     $this->actingAs($user)
         ->get(route('watchlist'))
-        ->assertSee($car->maker->name . ' ' . $car->model->name);
+        ->assertSee($car->maker->name.' '.$car->model->name);
 
     $this->actingAs($otherUser)
         ->get(route('watchlist'))
-        ->assertDontSee($car->maker->name . ' ' . $car->model->name);
+        ->assertDontSee($car->maker->name.' '.$car->model->name);
 });
 
 test('the home page marks a favourited car with is-favourite', function () {

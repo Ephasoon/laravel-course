@@ -6,7 +6,6 @@ use App\Models\City;
 use App\Models\FuelType;
 use App\Models\Maker;
 use App\Models\Model;
-use App\Models\State;
 use App\Models\User;
 
 test('home page returns 200 and shows a seeded car maker', function () {

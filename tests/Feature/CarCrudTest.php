@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Car;
-use App\Models\CarFeatures;
 use App\Models\CarImages;
 use App\Models\CarType;
 use App\Models\City;

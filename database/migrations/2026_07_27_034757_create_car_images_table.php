@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('car_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId(column:'car_id')->constrained('cars');
-            $table->string(column:'image_path', length:255);
-            $table->integer(column:'position');
+            $table->foreignId(column: 'car_id')->constrained('cars');
+            $table->string(column: 'image_path', length: 255);
+            $table->integer(column: 'position');
 
         });
     }

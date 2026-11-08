@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->foreignId(column: 'state_id')->constrained(table: 'states');
-            $table->string(column: 'name', length:45);
+            $table->string(column: 'name', length: 45);
         });
     }
 

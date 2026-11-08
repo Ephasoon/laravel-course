@@ -77,7 +77,7 @@ test('deleted cars disappear from home', function () {
         ->delete(route('car.destroy', $car));
 
     $this->get('/')
-        ->assertDontSee($car->maker->name . ' ' . $car->model->name);
+        ->assertDontSee($car->maker->name.' '.$car->model->name);
 });
 
 test('deleted cars disappear from search', function () {
@@ -95,7 +95,7 @@ test('deleted cars disappear from search', function () {
         ->delete(route('car.destroy', $car));
 
     $this->get(route('car.search'))
-        ->assertDontSee($car->maker->name . ' ' . $car->model->name);
+        ->assertDontSee($car->maker->name.' '.$car->model->name);
 });
 
 test('deleted cars show 404', function () {

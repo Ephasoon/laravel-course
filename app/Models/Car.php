@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 use App\Observers\CarObserver;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;

@@ -133,6 +133,7 @@ class CarController extends Controller
             ->route('car.index')
             ->with('success', 'Car deleted successfully.');
     }
+
     /**
      * Restore the specified soft-deleted resource.
      */

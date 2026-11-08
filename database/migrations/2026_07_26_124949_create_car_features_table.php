@@ -14,18 +14,18 @@ return new class extends Migration
         Schema::create('car_features', function (Blueprint $table) {
             $table->foreignId(column: 'car_id')->constrained(table: 'cars');
             $table->primary('car_id');
-            $table->boolean( column: 'abs')->default( value: 0);
-            $table->boolean( column: 'air_conditioning')->default( value: 0);
-            $table->boolean( column: 'power_windows')->default( value: 0);
-            $table->boolean( column: 'power_door_locks')->default( value: 0);
-            $table->boolean( column: 'cruise_control')->default( value: 0);
-            $table->boolean( column: 'bluetooth_connectivity')->default( value: 0);
-            $table->boolean( column: 'remote_start')->default( value: 0);
-            $table->boolean( column: 'gps_navigation')->default( value: 0);
-            $table->boolean( column: 'heated_seats')->default( value: 0);
-            $table->boolean( column: 'climate_control')->default( value: 0);
-            $table->boolean( column: 'rear_parking_sensors')->default( value: 0);
-            $table->boolean( column: 'leather_seats')->default( value: 0);
+            $table->boolean(column: 'abs')->default(value: 0);
+            $table->boolean(column: 'air_conditioning')->default(value: 0);
+            $table->boolean(column: 'power_windows')->default(value: 0);
+            $table->boolean(column: 'power_door_locks')->default(value: 0);
+            $table->boolean(column: 'cruise_control')->default(value: 0);
+            $table->boolean(column: 'bluetooth_connectivity')->default(value: 0);
+            $table->boolean(column: 'remote_start')->default(value: 0);
+            $table->boolean(column: 'gps_navigation')->default(value: 0);
+            $table->boolean(column: 'heated_seats')->default(value: 0);
+            $table->boolean(column: 'climate_control')->default(value: 0);
+            $table->boolean(column: 'rear_parking_sensors')->default(value: 0);
+            $table->boolean(column: 'leather_seats')->default(value: 0);
             $table->timestamps();
         });
     }
