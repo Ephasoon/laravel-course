@@ -276,7 +276,7 @@ states=0  cities=0  fuel_types=4
 
 ### Priority 3 — auth and authorization
 15. [x] **Implement auth**: POST `/register`, POST `/login`, POST `/logout`; use `Auth::attempt`, validation, session regeneration; add `auth` middleware around car create/edit/update/destroy; redirect guests to login. — **DONE (Phase 2): StudlyCase `LoginController`/`SignupController`; guest GET/POST login and signup; throttled login; remember-me; session regeneration/invalidation; real POST logout; verified by `tests/Feature/AuthTest.php`.**
-16. **Add password reset** (or email-verification) using Laravel’s built-in password broker; add request/reset views and routes.
+16. [x] **Add password reset** (or email-verification) using Laravel’s built-in password broker; add request/reset views and routes. — **DONE (Phase 6): `PasswordResetController` implements create/store/edit/update with the built-in `Password` broker; guest routes `password.request`, `password.email` (throttled 5/min), `password.reset`, `password.update`; `auth.forgot-password` and `auth.reset-password` views reuse the guest layout; identical success flash prevents account enumeration; verified by `tests/Feature/PasswordResetTest.php` (mailer is `log` by default, no custom template).**
 17. [x] **Add `CarPolicy`** and register it; authorize update/delete/show-private actions by ownership; add `Gate::before`/policy tests. — **DONE (Phase 2): CarPolicy created with `viewAny`/`view` true, `update`/`delete`/`restore`/`forceDelete` only for owner; CarController uses `$this->authorize()` in edit, update, destroy; CarPolicyTest verifies owner delete (soft), 403 for others, guest redirect, deleted cars disappear from home/search/show.**
 
 > Step 16 (password reset) is still open. Step 17 (CarPolicy) is done.

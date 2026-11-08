@@ -22,7 +22,7 @@
                 </label>
               </div>
               <div class="text-right mb-medium">
-                <a href="#" class="auth-page-password-reset"
+                <a href="{{ route('password.request') }}" class="auth-page-password-reset"
                   >Reset Password</a
                 >
               </div>
