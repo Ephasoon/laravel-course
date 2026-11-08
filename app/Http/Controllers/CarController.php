@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\SaveCar;
 use App\Http\Requests\StoreCarRequest;
 use App\Http\Requests\UpdateCarRequest;
 use App\Models\Car;
-use App\Models\CarFeatures;
-use App\Models\CarImages;
 use App\Models\CarType;
 use App\Models\City;
 use App\Models\FuelType;
@@ -14,26 +13,9 @@ use App\Models\Maker;
 use App\Models\Model;
 use App\Models\State;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class CarController extends Controller
 {
-    private const FEATURE_COLUMNS = [
-        'abs',
-        'air_conditioning',
-        'power_windows',
-        'power_door_locks',
-        'cruise_control',
-        'bluetooth_connectivity',
-        'remote_start',
-        'gps_navigation',
-        'heated_seats',
-        'climate_control',
-        'rear_parking_sensors',
-        'leather_seats',
-    ];
     /**
      * Display a listing of the resource.
      */
@@ -64,41 +46,9 @@ class CarController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCarRequest $request)
+    public function store(StoreCarRequest $request, SaveCar $saveCar)
     {
-        DB::transaction(function () use ($request) {
-            $car = Car::create([
-                'maker_id' => $request->integer('maker_id'),
-                'model_id' => $request->integer('model_id'),
-                'year' => $request->integer('year'),
-                'car_type_id' => $request->integer('car_type_id'),
-                'fuel_type_id' => $request->integer('fuel_type_id'),
-                'city_id' => $request->integer('city_id'),
-                'price' => $request->integer('price'),
-                'mileage' => $request->integer('mileage'),
-                'vin' => $request->string('vin')->toString(),
-                'phone' => $request->string('phone')->toString(),
-                'address' => $request->input('address'),
-                'description' => $request->input('description'),
-                'user_id' => auth()->id(),
-                'published_at' => $request->boolean('published') ? now() : null,
-            ]);
-
-            CarFeatures::create([
-                'car_id' => $car->id,
-                ...$this->featureValues($request),
-            ]);
-
-            foreach ($this->uploadedImages($request) as $position => $file) {
-                $path = $file->store('cars/'.$car->id, 'public');
-
-                CarImages::create([
-                    'car_id' => $car->id,
-                    'image_path' => Storage::url($path),
-                    'position' => $position + 1,
-                ]);
-            }
-        });
+        $saveCar->store($request, $request->user());
 
         return redirect()
             ->route('car.index')
@@ -164,65 +114,11 @@ class CarController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCarRequest $request, Car $car)
+    public function update(UpdateCarRequest $request, Car $car, SaveCar $saveCar)
     {
         $this->authorize('update', $car);
 
-        DB::transaction(function () use ($request, $car) {
-            $car->update([
-                'maker_id' => $request->integer('maker_id'),
-                'model_id' => $request->integer('model_id'),
-                'year' => $request->integer('year'),
-                'car_type_id' => $request->integer('car_type_id'),
-                'fuel_type_id' => $request->integer('fuel_type_id'),
-                'city_id' => $request->integer('city_id'),
-                'price' => $request->integer('price'),
-                'mileage' => $request->integer('mileage'),
-                'vin' => $request->string('vin')->toString(),
-                'phone' => $request->string('phone')->toString(),
-                'address' => $request->input('address'),
-                'description' => $request->input('description'),
-                'published_at' => $request->boolean('published')
-                    ? ($car->published_at ?? now())
-                    : null,
-            ]);
-
-            CarFeatures::updateOrCreate(
-                ['car_id' => $car->id],
-                ['car_id' => $car->id, ...$this->featureValues($request)]
-            );
-
-            $deleteIds = $request->input('delete_images', []);
-
-            if (! empty($deleteIds)) {
-                $images = $car->images()->whereIn('id', $deleteIds)->get();
-
-                foreach ($images as $image) {
-                    if (str_starts_with($image->image_path, '/storage/')) {
-                        Storage::disk('public')->delete(Str::after($image->image_path, '/storage/'));
-                    }
-
-                    $image->delete();
-                }
-            }
-
-            $position = (int) $car->images()->max('position');
-
-            foreach ($this->uploadedImages($request) as $file) {
-                $position++;
-                $path = $file->store('cars/'.$car->id, 'public');
-
-                CarImages::create([
-                    'car_id' => $car->id,
-                    'image_path' => Storage::url($path),
-                    'position' => $position,
-                ]);
-            }
-
-            $car->images()->orderBy('position')->get()->each(function (CarImages $image, int $index) {
-                $image->update(['position' => $index + 1]);
-            });
-        });
+        $saveCar->update($request, $car);
 
         return redirect()
             ->route('car.index')
@@ -292,24 +188,6 @@ class CarController extends Controller
         return view('car.search', compact(
             'cars', 'makers', 'models', 'states', 'cities', 'carTypes', 'fuelTypes', 'favouriteIds'
         ));
-    }
-
-    private function featureValues(Request $request): array
-    {
-        $values = [];
-
-        foreach (self::FEATURE_COLUMNS as $column) {
-            $values[$column] = $request->boolean($column);
-        }
-
-        return $values;
-    }
-
-    private function uploadedImages(Request $request): array
-    {
-        $files = $request->file('images', []);
-
-        return is_array($files) ? $files : [$files];
     }
 
     private function formData(): array
