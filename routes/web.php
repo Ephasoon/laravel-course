@@ -34,6 +34,10 @@ Route::post('/logout', [LoginController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
+Route::middleware('auth')->patch('/car/{car}/restore', [CarController::class, 'restore'])
+    ->withTrashed()
+    ->name('car.restore');
+
 Route::middleware('auth')->get('/watchlist', [FavouriteCarController::class, 'index'])->name('watchlist');
 
 Route::middleware('auth')->post('/favourite/{car}', [FavouriteCarController::class, 'toggle'])->name('favourite.toggle');

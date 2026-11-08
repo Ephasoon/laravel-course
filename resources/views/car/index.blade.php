@@ -29,6 +29,7 @@
                     <td>{{ $car->created_at?->format('Y-m-d') }}</td>
                     <td>{{ $car->published_at ? 'Yes' : 'No' }}</td>
                     <td class="">
+                      @unless($car->trashed())
                       <a
                         href="{{ route('car.edit', $car) }}"
                         class="btn btn-edit inline-flex items-center"
@@ -92,6 +93,17 @@
                         delete
                       </button>
                       </form>
+                      @endunless
+                      @if($car->trashed())
+                      <span class="text-muted">Deleted</span>
+                      <form action="{{ route('car.restore', $car) }}" method="POST" style="display:inline">
+                        @csrf
+                        @method('PATCH')
+                        <button class="btn btn-edit inline-flex items-center">
+                          restore
+                        </button>
+                      </form>
+                      @endif
                     </td>
                   </tr>
                   @empty

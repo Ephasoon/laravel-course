@@ -44,6 +44,7 @@ class CarController extends Controller
         }
 
         $cars = Car::query()
+            ->withTrashed()
             ->where('user_id', auth()->id())
             ->with(['maker', 'model', 'carType', 'fuelType', 'city.state', 'primaryImage'])
             ->orderByDesc('published_at')
@@ -241,6 +242,20 @@ class CarController extends Controller
             ->route('car.index')
             ->with('success', 'Car deleted successfully.');
     }
+    /**
+     * Restore the specified soft-deleted resource.
+     */
+    public function restore(Car $car)
+    {
+        $this->authorize('restore', $car);
+
+        $car->restore();
+
+        return redirect()
+            ->route('car.index')
+            ->with('success', 'Car restored successfully.');
+    }
+
     public function search(Request $request)
     {
         $request->validate([
