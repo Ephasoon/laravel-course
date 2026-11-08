@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\SaveCar;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCarRequest;
+use App\Http\Requests\UpdateCarRequest;
 use App\Http\Resources\CarResource;
 use App\Models\Car;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class CarController extends Controller
 {
@@ -84,5 +89,47 @@ class CarController extends Controller
             ->withQueryString();
 
         return CarResource::collection($cars);
+    }
+
+    public function store(StoreCarRequest $request, SaveCar $saveCar): JsonResponse
+    {
+        $this->authorize('create', Car::class);
+
+        $car = $saveCar->store($request, $request->user());
+
+        $car->load($this->eagerLoad());
+
+        return (new CarResource($car))->response()->setStatusCode(201);
+    }
+
+    public function update(UpdateCarRequest $request, Car $car, SaveCar $saveCar): CarResource
+    {
+        $this->authorize('update', $car);
+
+        $saveCar->update($request, $car);
+
+        $car->refresh()->load($this->eagerLoad());
+
+        return new CarResource($car);
+    }
+
+    public function destroy(Car $car): Response
+    {
+        $this->authorize('delete', $car);
+
+        $car->delete();
+
+        return response()->noContent();
+    }
+
+    public function restore(Car $car): CarResource
+    {
+        $this->authorize('restore', $car);
+
+        $car->restore();
+
+        $car->load($this->eagerLoad());
+
+        return new CarResource($car);
     }
 }
