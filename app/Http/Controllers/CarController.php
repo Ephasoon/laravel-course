@@ -258,7 +258,7 @@ class CarController extends Controller
 
     public function search(Request $request)
     {
-        $request->validate([
+        $filters = $request->validate([
             'maker_id' => ['nullable', 'integer', 'exists:makers,id'],
             'model_id' => ['nullable', 'integer', 'exists:models,id'],
             'state_id' => ['nullable', 'integer', 'exists:states,id'],
@@ -275,47 +275,8 @@ class CarController extends Controller
 
         $query = Car::query()
             ->whereNotNull('published_at')
-            ->with(['maker', 'model', 'carType', 'fuelType', 'city.state', 'primaryImage']);
-
-        foreach (['maker_id', 'model_id', 'car_type_id', 'fuel_type_id', 'city_id'] as $filter) {
-            if ($request->filled($filter)) {
-                $query->where($filter, $request->input($filter));
-            }
-        }
-
-        if ($request->filled('state_id')) {
-            $query->whereHas('city', function ($cityQuery) use ($request) {
-                $cityQuery->where('state_id', $request->input('state_id'));
-            });
-        }
-
-        if ($request->filled('year_from')) {
-            $query->where('year', '>=', $request->integer('year_from'));
-        }
-
-        if ($request->filled('year_to')) {
-            $query->where('year', '<=', $request->integer('year_to'));
-        }
-
-        if ($request->filled('price_from')) {
-            $query->where('price', '>=', $request->input('price_from'));
-        }
-
-        if ($request->filled('price_to')) {
-            $query->where('price', '<=', $request->input('price_to'));
-        }
-
-        if ($request->filled('mileage')) {
-            $query->where('mileage', '<=', $request->integer('mileage'));
-        }
-
-        if ($request->filled('sort')) {
-            $sort = $request->input('sort');
-            $direction = str_starts_with($sort, '-') ? 'desc' : 'asc';
-            $query->orderBy(ltrim($sort, '-'), $direction);
-        } else {
-            $query->orderByDesc('published_at');
-        }
+            ->with(['maker', 'model', 'carType', 'fuelType', 'city.state', 'primaryImage'])
+            ->filter($filters);
 
         $cars = $query->paginate(15)->withQueryString();
 

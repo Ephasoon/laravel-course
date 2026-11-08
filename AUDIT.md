@@ -283,8 +283,8 @@ states=0  cities=0  fuel_types=4
 18. [x] **Wire header/auth UI**: fix `.html` links, show Login/Signup vs My Account based on `@auth`, make logout a real POST form. — **DONE (Phase 2): header uses `route()` links; guests see Login/Signup; users see their name, My Cars, Add new car, and a CSRF-protected POST logout; shared flash component; verified by `tests/Feature/HeaderTest.php`.**
 
 ### Priority 4 — API, async, mail, cache
-19. **Install Sanctum** (`composer require laravel/sanctum`, publish config/migration), register `api:` routes in `bootstrap/app.php`, add `routes/api.php`.
-20. **Build the API**: `Api/CarController` with index/show/store/update/destroy, API Resources, token login endpoint, and feature tests.
+19. [x] **Install Sanctum** (`composer require laravel/sanctum`, publish config/migration), register `api:` routes in `bootstrap/app.php`, add `routes/api.php`. — **DONE (Phase 4): `laravel/sanctum` v4.3.3 installed via `php artisan install:api --no-interaction`; `api:` routes registered in `bootstrap/app.php`; `Laravel\Sanctum\HasApiTokens` added to `User`; `personal_access_tokens` migration published and run; `php artisan test` passes.**
+20. **Build the API**: `Api/CarController` with index/show/store/update/destroy, API Resources, token login endpoint, and feature tests. — **20: read endpoints done, write endpoints pending**.
 21. **Add one real queued job**: e.g. `ProcessCarImages` or `SendCarPublishedEmail`; dispatch it from `store`/`update`; add a test with `Queue::fake()`.
 22. **Add mail/notifications**: a `CarPublishedNotification` (or welcome email) with a Blade mail view; test with `Mail::fake()`/`Notification::fake()`.
 23. **Add caching**: cache the home “latest cars” and catalog lookups with `Cache::remember`, invalidate on car create/update/delete; test cache behavior.

@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -84,5 +85,50 @@ class Car extends Model
     public function primaryImage(): HasOne
     {
         return $this->hasOne(CarImages::class)->ofMany('position', 'min');
+    }
+
+    public function scopeFilter(Builder $query, array $filters): Builder
+    {
+        $filled = fn (string $key): bool => ! blank($filters[$key] ?? null);
+
+        foreach (['maker_id', 'model_id', 'car_type_id', 'fuel_type_id', 'city_id'] as $filter) {
+            if ($filled($filter)) {
+                $query->where($filter, $filters[$filter]);
+            }
+        }
+
+        if ($filled('state_id')) {
+            $query->whereHas('city', fn (Builder $cityQuery) => $cityQuery->where('state_id', $filters['state_id']));
+        }
+
+        if ($filled('year_from')) {
+            $query->where('year', '>=', (int) $filters['year_from']);
+        }
+
+        if ($filled('year_to')) {
+            $query->where('year', '<=', (int) $filters['year_to']);
+        }
+
+        if ($filled('price_from')) {
+            $query->where('price', '>=', $filters['price_from']);
+        }
+
+        if ($filled('price_to')) {
+            $query->where('price', '<=', $filters['price_to']);
+        }
+
+        if ($filled('mileage')) {
+            $query->where('mileage', '<=', (int) $filters['mileage']);
+        }
+
+        if ($filled('sort')) {
+            $sort = $filters['sort'];
+            $direction = str_starts_with($sort, '-') ? 'desc' : 'asc';
+            $query->orderBy(ltrim($sort, '-'), $direction);
+        } else {
+            $query->orderByDesc('published_at');
+        }
+
+        return $query;
     }
 }
