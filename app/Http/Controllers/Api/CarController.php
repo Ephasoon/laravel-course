@@ -132,4 +132,30 @@ class CarController extends Controller
 
         return new CarResource($car);
     }
+
+    public function favourite(Request $request, Car $car): JsonResponse
+    {
+        if ($car->published_at === null && $request->user()->id !== $car->user_id) {
+            abort(404);
+        }
+
+        $request->user()->favouriteCars()->toggle($car->id);
+
+        $favourited = $request->user()
+            ->favouriteCars()
+            ->where('cars.id', $car->id)
+            ->exists();
+
+        return response()->json(['favourited' => $favourited]);
+    }
+
+    public function favourites(Request $request): AnonymousResourceCollection
+    {
+        $cars = $request->user()
+            ->favouriteCars()
+            ->with($this->eagerLoad())
+            ->paginate(15);
+
+        return CarResource::collection($cars);
+    }
 }

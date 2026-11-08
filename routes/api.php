@@ -19,6 +19,10 @@ Route::prefix('v1')->group(function () {
         Route::patch('/cars/{car}/restore', [CarController::class, 'restore'])
             ->withTrashed()
             ->name('api.cars.restore');
+        Route::post('/cars/{car}/favourite', [CarController::class, 'favourite'])
+            ->name('api.cars.favourite');
+        Route::get('/favourites', [CarController::class, 'favourites'])
+            ->name('api.favourites');
     });
 
     Route::get('/cars', [CarController::class, 'index'])
