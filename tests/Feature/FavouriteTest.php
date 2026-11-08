@@ -69,16 +69,18 @@ test('the home page marks a favourited car with is-favourite', function () {
     $response->assertSee('btn-heart is-favourite');
 });
 
-test('markup test: on the home page, substr_count of "<form" equals substr_count of "</form>"', function () {
-    $response = $this->get('/');
-    $html = $response->getContent();
+test('the home page has balanced form and svg markup for guests and users', function () {
+    Car::factory()->count(3)->create(['published_at' => now()]);
 
-    assert(substr_count($html, '<form') === substr_count($html, '</form>'));
-});
+    $guestHtml = $this->get('/')->getContent();
 
-test('markup test: on the home page, substr_count of "<svg" equals "</svg>"', function () {
-    $response = $this->get('/');
-    $html = $response->getContent();
+    expect(substr_count($guestHtml, '<form'))->toBe(substr_count($guestHtml, '</form>'));
+    expect(substr_count($guestHtml, '<svg'))->toBe(substr_count($guestHtml, '</svg>'));
 
-    assert(substr_count($html, '<svg') === substr_count($html, '</svg>'));
+    $this->actingAs(User::factory()->create());
+
+    $userHtml = $this->get('/')->getContent();
+
+    expect(substr_count($userHtml, '<form'))->toBe(substr_count($userHtml, '</form>'));
+    expect(substr_count($userHtml, '<svg'))->toBe(substr_count($userHtml, '</svg>'));
 });
